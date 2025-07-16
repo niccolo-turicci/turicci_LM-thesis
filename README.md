@@ -5,6 +5,7 @@ This is the repository for my Master's degree thesis in Molecular Biology and Ge
 The goal is to create a protocol for efficient PPI prediction and validation by integrating two tools: AlphaPullDown (APD) and AlphaBridge (AB). 
 
 ## Workflow
+![Workflow scheme](images/workflow.png)
 1- produce PPI predictions (via APD)
 
 2- modify the APD output to make it suited for AB
