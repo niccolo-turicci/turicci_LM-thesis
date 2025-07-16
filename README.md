@@ -6,5 +6,7 @@ The goal is to create a protocol for efficient PPI prediction and validation by 
 
 ## Workflow
 1- produce PPI predictions (via APD)
+
 2- modify the APD output to make it suited for AB
+
 3- run AB to get the plots
