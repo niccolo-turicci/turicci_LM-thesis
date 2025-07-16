@@ -28,7 +28,7 @@ def get_output_directories():
     os.makedirs(output_folder, exist_ok=True)
     return temp_folder, output_folder
 
-# --- 1-calculate_res_dist.py ---
+# --- 1 - calculate residue distances ---
 def calculate_CA_distances(pdb_path, output_name):
     parser = PDB.PDBParser(QUIET=True)
     structure = parser.get_structure('protein', pdb_path)
@@ -71,7 +71,7 @@ def output_residue_distances(script_dir, temp_folder):
             print(f"Processing {pdb_path} ...")
             calculate_CA_distances(pdb_path, output_name)
 
-# --- 2-contact_prob.py ---
+# --- 2 - calculate contact proability ---
 def compute_contact_probabilities(distance_matrix, pae_matrix, plddt, threshold=8.0):
     plddt_norm = np.clip(plddt / 100.0, 0, 1)
     pairwise_plddt = (plddt_norm[:, None] + plddt_norm[None, :]) / 2.0
@@ -107,7 +107,7 @@ def output_contact_probabilities(script_dir, temp_folder):
         np.savetxt(output_base + ".csv", contact_probs, delimiter=",")
         print(f"[DONE] Output saved as {output_base}.npy and {output_base}.csv")
 
-# --- 3-full_data.py ---
+# --- 3 - create the full_data.json ---
 def load_pae_json(json_path):
     with open(json_path, 'r') as f:
         data = json.load(f)
@@ -193,7 +193,7 @@ def output_full_data(script_dir, temp_folder, output_folder):
         print(f"[DONE] JSON saved to {output_filename}")
         validate_output_json(output_filename)
 
-# --- 4-summary_confidence.py ---
+# --- 4 - create summary_confidence.json ---
 def convert(obj):
     if isinstance(obj, np.ndarray):
         return [convert(i) for i in obj.tolist()]
@@ -392,7 +392,7 @@ def output_summary_confidence(script_dir, output_folder):
         with open(os.path.join(output_folder, f'summary_confidences_{model_name}.json'), 'w') as out:
             json.dump(convert(summary), out, indent=1)
 
-# --- 5-job_request.py ---
+# --- 5 - create job_request.json ---
 def extract_sequence_from_pdb(pdb_path):
     chains = {}
     seen = {}
@@ -446,7 +446,7 @@ def output_job_request(script_dir, output_folder):
         json.dump(job_request, f, indent=1)
     print("Job request written to output_folder/job_request.json")
 
-# --- 6-converts .pdb into .cif ---
+# --- 6 - converts the .pdb files into .cif files ---
 def convert_pdb_to_cif(script_dir, output_folder):
     pdb_files = sorted(glob.glob(os.path.join(script_dir, "ranked_*.pdb")))
     if not pdb_files:
