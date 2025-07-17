@@ -1,5 +1,5 @@
 # AlphaPullDown and AlphaBridge: a pipeline for PPI prediction and validation
-This is the repository for my Master's degree thesis in Molecular Biology and Genetics at the Università di Pavia (Dipartimento di Biologia e Biotecnologie, L. Spallanzani). 
+This is the repository with the code for my Master's degree thesis in Molecular Biology and Genetics at the Università di Pavia (Dipartimento di Biologia e Biotecnologie, L. Spallanzani). 
 
 ## Aim of the thesis
 The goal is to create a protocol for efficient PPI prediction and validation by integrating two tools: AlphaPullDown (APD) and AlphaBridge (AB). 
