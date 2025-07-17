@@ -12,8 +12,8 @@ from scipy.special import expit  # sigmoid
 from Bio import PDB
 
 
-# --- 1 - calculate residue distances ---
-def calculate_CA_distances(pdb_path, output_name):
+# --- 1 - Calculate pairwise residue distance: for each couple of C-alphas. Saves distances in a distance matrix. ---
+def calculate_CA_distances(pdb_path, output_name):   # looks inside the .pdb file for all C-alpha
     parser = PDB.PDBParser(QUIET=True)
     structure = parser.get_structure('protein', pdb_path)
     residues_list = []
@@ -23,7 +23,7 @@ def calculate_CA_distances(pdb_path, output_name):
                 if "CA" in residue:
                     residues_list.append((chain.get_id(), residue.get_id()[1]))
     N = len(residues_list)
-    print(f"Total residues with CA: {N}")
+    print(f"Total residues found: {N}")
     dist_matrix = np.full((N, N), np.inf)
     residue_index = {res: i for i, res in enumerate(residues_list)}
     for model in structure:
@@ -41,7 +41,7 @@ def calculate_CA_distances(pdb_path, output_name):
                         idx2 = residue_index[(chain2.get_id(), residue2.get_id()[1])]
                         dist = atom1 - atom2
                         dist_matrix[idx1, idx2] = dist
-    np.save(output_name, dist_matrix)
+    np.save(output_name, dist_matrix)  # matrix saved as a .npy file
     print(f"Distance matrix saved as {output_name}")
 
 def output_residue_distances(script_dir, temp_folder):
@@ -55,22 +55,23 @@ def output_residue_distances(script_dir, temp_folder):
             print(f"Processing {pdb_path} ...")
             calculate_CA_distances(pdb_path, output_name)
 
-# --- 2 - calculate contact proability ---
+# --- 2.1 - Calculates contact proability based on proximity (distance_matrix), model confidence (plddt), pae (pae_matrix). ---
 def compute_contact_probabilities(distance_matrix, pae_matrix, plddt, threshold=8.0):
-    plddt_norm = np.clip(plddt / 100.0, 0, 1)
-    pairwise_plddt = (plddt_norm[:, None] + plddt_norm[None, :]) / 2.0
-    pae_conf = expit(-(pae_matrix - threshold) / 1.5)
-    within_threshold = (distance_matrix <= threshold).astype(float)
-    contact_probs = within_threshold * pae_conf * pairwise_plddt
+    plddt_norm = np.clip(plddt / 100.0, 0, 1)   # transforms plddt from 1-100 values to 0-1 values
+    pairwise_plddt = (plddt_norm[:, None] + plddt_norm[None, :]) / 2.0   # calculates plddt mean for each residue pair
+    pae_conf = expit(-(pae_matrix - threshold) / 1.5)   # using a sigmoid function converts pae score into a confidence score: treshold for contact is set at 8 Å
+    within_threshold = (distance_matrix <= threshold).astype(float)   
+    contact_probs = within_threshold * pae_conf * pairwise_plddt   # combines the confidence values into a single value for each res pair: returns a matrix called contact_probs
     return contact_probs
-
+    
+# --- 2.2 - Calculates contact proability based on .npy and .pkl files (model confidence files), by calling compute_contact_probabilities function  ---
 def output_contact_probabilities(script_dir, temp_folder):
     npy_files = sorted(glob.glob(os.path.join(temp_folder, "distance_matrix_ranked_*.npy")))
     pkl_files = sorted(glob.glob(os.path.join(script_dir, "result_model_*_*.pkl")))
     if not npy_files or not pkl_files:
         print("No .npy or .pkl files found in the temp or input directory.")
         return
-    for i in range(5):
+    for i in range(5):   # loops over all the 5 models produced by APD
         npy_pattern = f"distance_matrix_ranked_{i}.npy"
         pkl_pattern = f"result_model_{i+1}_*.pkl"
         npy_path = os.path.join(temp_folder, npy_pattern)
@@ -79,7 +80,7 @@ def output_contact_probabilities(script_dir, temp_folder):
             print(f"Skipping: {npy_pattern} or {pkl_pattern} not found.")
             continue
         pkl_path = pkl_candidates[0]
-        print(f"[INFO] Processing {npy_path} with {os.path.basename(pkl_path)}")
+        print(f"Processing {npy_path} with {os.path.basename(pkl_path)}")
         distance_matrix = np.load(npy_path)
         with open(pkl_path, 'rb') as f:
             pkl_data = pickle.load(f, encoding='latin1')
@@ -89,10 +90,10 @@ def output_contact_probabilities(script_dir, temp_folder):
         output_base = os.path.join(temp_folder, f"contact_probs_ranked_{i}")
         np.save(output_base + ".npy", contact_probs)
         np.savetxt(output_base + ".csv", contact_probs, delimiter=",")
-        print(f"[DONE] Output saved as {output_base}.npy and {output_base}.csv")
+        print(f"Output saved as {output_base}.npy and {output_base}.csv in temp_files folder")
 
-# --- 3 - create the full_data.json ---
-def load_pae_json(json_path):
+# --- 3 - Creates the full_data.json file collecting info from different confidence files. ---
+def load_pae_json(json_path):   # takes the .json file containing the pae matrix looking for the line with the pae data
     with open(json_path, 'r') as f:
         data = json.load(f)
         if isinstance(data, list) and len(data) > 0:
@@ -101,7 +102,7 @@ def load_pae_json(json_path):
                 return first["predicted_aligned_error"]
         raise ValueError("PAE matrix not found in JSON structure.")
 
-def parse_pdb(pdb_path):
+def parse_pdb(pdb_path):   # looks for chain IDs, plddt scores (for each atom), residue chain IDs and residue numbers inside the .pdb file
     atom_chain_ids = []
     atom_plddts = []
     token_chain_ids = []
@@ -122,7 +123,7 @@ def parse_pdb(pdb_path):
                     seen_residues.add(res_key)
     return atom_chain_ids, atom_plddts, token_chain_ids, token_res_ids
 
-def validate_output_json(filepath):
+def validate_output_json(filepath):   # not actually necessary: can be commented out 
     expected_keys = {
         "atom_chain_ids",
         "atom_plddts",
@@ -131,7 +132,6 @@ def validate_output_json(filepath):
         "token_chain_ids",
         "token_res_ids"
     }
-    print(f"[VALIDATION] Checking {filepath}")
     try:
         with open(filepath, "r") as f:
             data = json.load(f)
@@ -142,11 +142,11 @@ def validate_output_json(filepath):
             for key in expected_keys:
                 if not isinstance(data[key], list):
                     raise ValueError(f"Key '{key}' is not a list")
-            print("[VALIDATION] File structure is valid.")
+            print(".json file structure is valid.")
     except Exception as e:
-        print(f"[VALIDATION] Error in JSON structure: {e}")
+        print(f"Error in .json file structure: {e}")
 
-def output_full_data(script_dir, temp_folder, output_folder):
+def output_full_data(script_dir, temp_folder, output_folder):   # actually creates the full_data.json; for each model
     pdb_files = sorted(glob.glob(os.path.join(script_dir, "ranked_*.pdb")))
     pae_files = sorted(glob.glob(os.path.join(script_dir, "pae_model_*.json")))
     contact_files = sorted(glob.glob(os.path.join(temp_folder, "contact_probs_ranked_*.npy")))
@@ -158,7 +158,7 @@ def output_full_data(script_dir, temp_folder, output_folder):
         pdb_path = pdb_files[i]
         pae_path = pae_files[i]
         contact_probs_path = contact_files[i]
-        print(f"[INFO] Processing:\n  PDB: {os.path.basename(pdb_path)}\n  PAE: {os.path.basename(pae_path)}\n  CONTACT: {os.path.basename(contact_probs_path)}")
+        print(f"Processing:\n  PDB: {os.path.basename(pdb_path)}\n  PAE: {os.path.basename(pae_path)}\n  CONTACT: {os.path.basename(contact_probs_path)}")
         pae_matrix = load_pae_json(pae_path)
         contact_matrix = np.load(contact_probs_path).tolist()
         atom_chain_ids, atom_plddts, token_chain_ids, token_res_ids = parse_pdb(pdb_path)
@@ -174,11 +174,11 @@ def output_full_data(script_dir, temp_folder, output_folder):
         output_filename = os.path.join(output_folder, f"{pdb_base}_full_data.json")
         with open(output_filename, "w") as f:
             json.dump(output_data, f, indent=2)
-        print(f"[DONE] JSON saved to {output_filename}")
+        print(f".json file saved to {output_filename}")
         validate_output_json(output_filename)
 
-# --- 4 - create summary_confidence.json ---
-def convert(obj):
+# --- 4 - Creates summary_confidence.json file ---
+def convert(obj):   # makes sure all data can be handled by the pipeline (reproducibility/flexibility)
     if isinstance(obj, np.ndarray):
         return [convert(i) for i in obj.tolist()]
     if isinstance(obj, (np.float32, np.float64, float)):
@@ -193,7 +193,7 @@ def convert(obj):
         return [convert(i) for i in obj]
     return obj
 
-def round_floats(obj, ndigits=2):
+def round_floats(obj, ndigits=2):   # avoids having long values 
     if isinstance(obj, float):
         return round(obj, ndigits)
     elif isinstance(obj, list):
@@ -203,7 +203,7 @@ def round_floats(obj, ndigits=2):
     else:
         return obj
 
-def get_chain_residue_ranges_from_pdb(pdb_file):
+def get_chain_residue_ranges_from_pdb(pdb_file):   # looks for chain bundaries inside the .pdb file: lines starting with ATOM (stores first and last value)
     chain_residues = {}
     chain_order = []
     atom_line = re.compile(r"^ATOM\s+\d+\s+\S+\s+\S+\s+(\S)\s+(\d+)")
@@ -228,7 +228,7 @@ def get_chain_residue_ranges_from_pdb(pdb_file):
         chain_residues[chain] = (start, end + 1)
     return chain_residues, chain_order
 
-def compute_chain_pair_pae_min(pae, chain_ranges, chain_order):
+def compute_chain_pair_pae_min(pae, chain_ranges, chain_order):   # creates a matrix with the minimum pae value from each residue pair (lower pae = higher confidence)
     n = len(chain_order)
     pae_min = []
     for i in range(n):
@@ -241,7 +241,7 @@ def compute_chain_pair_pae_min(pae, chain_ranges, chain_order):
         pae_min.append(row)
     return pae_min
 
-def compute_chain_ptm_from_pae(pae_matrix, chain_ranges, chain_order):
+def compute_chain_ptm_from_pae(pae_matrix, chain_ranges, chain_order):   # converts the average pae value for each chain into a ptm score (formula derived from AlphaFold)
     chain_ptm = []
     for chain in chain_order:
         start, end = chain_ranges[chain]
@@ -251,7 +251,7 @@ def compute_chain_ptm_from_pae(pae_matrix, chain_ranges, chain_order):
         chain_ptm.append(ptm_score)
     return chain_ptm
 
-def extract_pae_matrix(pae_data):
+def extract_pae_matrix(pae_data):   # can extract the actual pae matrix from a variety of formats
     if isinstance(pae_data, list) and len(pae_data) == 1 and isinstance(pae_data[0], dict):
         if 'predicted_aligned_error' in pae_data[0]:
             return np.array(pae_data[0]['predicted_aligned_error'])
@@ -276,7 +276,7 @@ def extract_pae_matrix(pae_data):
     else:
         raise ValueError("PAE data format not recognized.")
 
-def check_clashes_in_pdb(pdb_file, threshold=2.0):
+def check_clashes_in_pdb(pdb_file, threshold=2.0):   # if two atoms are closer than 2 Å are considered clashes (uses both ATOM and HEtatm lines in the .pdb)
     atoms = []
     with open(pdb_file, 'r') as f:
         for line in f:
@@ -297,7 +297,7 @@ def check_clashes_in_pdb(pdb_file, threshold=2.0):
             return 1.0
     return 0.0
 
-def output_summary_confidence(script_dir, output_folder):
+def output_summary_confidence(script_dir, output_folder):   # puts together all the metrics: creates a file for each of the 5 models
     with open(os.path.join(script_dir, 'ranking_debug.json'), 'r') as f:
         ranking = json.load(f)
     iptm_ptm = ranking['iptm+ptm']
@@ -376,7 +376,7 @@ def output_summary_confidence(script_dir, output_folder):
         with open(os.path.join(output_folder, f'summary_confidences_{model_name}.json'), 'w') as out:
             json.dump(convert(summary), out, indent=1)
 
-# --- 5 - create job_request.json ---
+# --- 5 - Creates job_request.json file: needed for AlphaFold and other modeling jobs. ---
 def extract_sequence_from_pdb(pdb_path):
     chains = {}
     seen = {}
@@ -430,7 +430,7 @@ def output_job_request(script_dir, output_folder):
         json.dump(job_request, f, indent=1)
     print("Job request written to output_folder/job_request.json")
 
-# --- 6 - converts the .pdb files into .cif files ---
+# --- 6 - Converts the .pdb files into .cif files to be fed into AlphaBridge ---
 def convert_pdb_to_cif(script_dir, output_folder):
     pdb_files = sorted(glob.glob(os.path.join(script_dir, "ranked_*.pdb")))
     if not pdb_files:
