@@ -13,5 +13,6 @@ The goal is to create a protocol for efficient PPI prediction and validation by 
 3- run AB to get the plots
 
 ## Command usage
+### Converting APD output to ABridge
 ```python
 python -m src --input ./your/input/folder --output ./your/output/folder
