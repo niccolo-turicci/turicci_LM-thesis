@@ -5,7 +5,7 @@ from .conversion import *
 def main():
     parser = argparse.ArgumentParser(description="Takes APD output and makes it suited to be fed into ABridge.")
     parser.add_argument('--input', type=str, required=True, help="Path to the input folder containing the APD output.")
-    parser.add_argument('--output', type=str, required=True, help="Name for output directories.")
+    parser.add_argument('--output', type=str, required=True, help="Name for output directory (both temporary and output folders are gonna be here.")
     args = parser.parse_args()
 
 
