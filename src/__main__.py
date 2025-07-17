@@ -3,9 +3,9 @@ import argparse
 from .conversion import *
 
 def main():
-    parser = argparse.ArgumentParser(description="Process AlphaFold output and convert to standardized formats.")
-    parser.add_argument('--input', type=str, required=True, help="Path to AlphaFold output directory.")
-    parser.add_argument('--output', type=str, required=True, help="Base name for output directories.")
+    parser = argparse.ArgumentParser(description="Takes APD output and makes it suited to be fed into ABridge.")
+    parser.add_argument('--input', type=str, required=True, help="Path to the input folder containing the APD output.")
+    parser.add_argument('--output', type=str, required=True, help="Name for output directories.")
     args = parser.parse_args()
 
 
