@@ -11,22 +11,6 @@ import copy
 from scipy.special import expit  # sigmoid
 from Bio import PDB
 
-# --- 0- define input and output folders ---
-def get_working_directory():
-    folder = input("Enter the path to the folder to process: ").strip()
-    if not os.path.isdir(folder):
-        print(f"Error: '{folder}' is not a valid directory.")
-        exit(1)
-    return folder
-
-def get_output_directories():
-    base_name = input("Enter the name for the output folder: ").strip()
-    base_folder = os.path.join(os.getcwd(), base_name)
-    temp_folder = os.path.join(base_folder, "temp_files")
-    output_folder = os.path.join(base_folder, "output_folder")
-    os.makedirs(temp_folder, exist_ok=True)
-    os.makedirs(output_folder, exist_ok=True)
-    return temp_folder, output_folder
 
 # --- 1 - calculate residue distances ---
 def calculate_CA_distances(pdb_path, output_name):
@@ -462,17 +446,3 @@ def convert_pdb_to_cif(script_dir, output_folder):
         io_cif.set_structure(structure)
         io_cif.save(cif_file)
         print(f"Converted {pdb_file} to {cif_file}")
-
-# --- Unified main ---
-def main():
-    script_dir = get_working_directory()
-    temp_folder, output_folder = get_output_directories()
-    output_residue_distances(script_dir, temp_folder)
-    output_contact_probabilities(script_dir, temp_folder)
-    output_full_data(script_dir, temp_folder, output_folder)
-    output_summary_confidence(script_dir, output_folder)
-    output_job_request(script_dir, output_folder)
-    convert_pdb_to_cif(script_dir, output_folder)
-
-if __name__ == "__main__":
-    main()
