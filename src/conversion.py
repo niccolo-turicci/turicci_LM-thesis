@@ -406,7 +406,7 @@ def output_job_request(script_dir, output_folder):
     name = "name of the job"
     modelSeeds = ["1234"]
     useStructureTemplate = True
-    dialect = "alphafoldserver"
+    dialect = "alphafoldserver" # or AF3 (as dialect)
     version = 1
     # -----------------------
     seqs = extract_sequence_from_pdb(pdb_file)
