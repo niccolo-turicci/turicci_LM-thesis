@@ -171,7 +171,7 @@ def output_full_data(script_dir, temp_folder, output_folder):   # actually creat
             "token_res_ids": token_res_ids
         }
         pdb_base = os.path.splitext(os.path.basename(pdb_path))[0]
-        output_filename = os.path.join(output_folder, f"fold_{pdb_base}_full_data.json")
+        output_filename = os.path.join(output_folder, f"fold_full_data_{pdb_base}.json")
         with open(output_filename, "w") as f:
             json.dump(output_data, f, indent=2)
         print(f".json file saved to {output_filename}")
@@ -442,7 +442,7 @@ def convert_pdb_to_cif(script_dir, output_folder):
     for pdb_file in pdb_files:
         structure_id = os.path.splitext(os.path.basename(pdb_file))[0]
         structure = io_pdb.get_structure(structure_id, pdb_file)
-        cif_file = os.path.join(output_folder, f"fold_{structure_id}_model.cif")
+        cif_file = os.path.join(output_folder, f"fold_model_{structure_id}.cif")
         io_cif.set_structure(structure)
         io_cif.save(cif_file)
         print(f"Converted {pdb_file} to {cif_file}")
