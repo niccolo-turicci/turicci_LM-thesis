@@ -370,10 +370,10 @@ def output_summary_confidence(script_dir, output_folder):   # puts together all 
             "ptm": ptm,
             "ranking_score": ranking_score
         }
-        summary = round_floats(summary, 2)
+        summary = round_floats(summary, 2)  
         unrelaxed_pdb_file = os.path.join(script_dir, f'unrelaxed_model_{i}_multimer_v3_pred_0.pdb')
         has_clash = check_clashes_in_pdb(unrelaxed_pdb_file, threshold=2.0)
-        with open(os.path.join(output_folder, f'{model_name}_summary_confidences.json'), 'w') as out:
+        with open(os.path.join(output_folder, f'summary_confidences_{model_name}.json'), 'w') as out:
             json.dump(convert(summary), out, indent=1)
 
 # --- 5 - Creates job_request.json file: needed for AlphaFold and other modeling jobs. ---
