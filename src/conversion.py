@@ -352,11 +352,11 @@ def output_summary_confidence(script_dir, output_folder):   # puts together all 
         if n_chains > 0 and len(chain_iptm) == n_chains and len(chain_ptm) == n_chains:
             for i in range(n_chains):
                 row = []
-                for chain_j in range(n_chains):
-                    if chain_i == chain_j:
-                        row.append(chain_ptm[chain_i])
+                for j in range(n_chains):
+                    if i == j:
+                        row.append(chain_ptm[i])
                     else:
-                        row.append(chain_iptm[chain_j])
+                        row.append(chain_iptm[j])
                 chain_pair_iptm.append(row)
         summary = {
             "chain_iptm": chain_iptm,
