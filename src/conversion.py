@@ -440,7 +440,7 @@ def convert_pdb_to_cif(script_dir, output_folder):
     io_pdb = PDB.PDBParser(QUIET=True)
     io_cif = PDB.MMCIFIO()
     for pdb_file in pdb_files:
-        structure_id = os.path.splitext(os.path.basename(pdb_file))[0]
+        structure_id = os.path.splitext(os.path.basename(pdb_file))[0].replace("ranked_", "")
         structure = io_pdb.get_structure(structure_id, pdb_file)
         cif_file = os.path.join(output_folder, f"run_out_model_{structure_id}.cif")
         io_cif.set_structure(structure)
