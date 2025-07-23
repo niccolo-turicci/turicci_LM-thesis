@@ -171,7 +171,7 @@ def output_full_data(script_dir, temp_folder, output_folder):   # actually creat
             "token_res_ids": token_res_ids
         }
         pdb_base = os.path.splitext(os.path.basename(pdb_path))[0]
-        output_filename = os.path.join(output_folder, f"run_out_full_data{i}.json")
+        output_filename = os.path.join(output_folder, f"run_out_full_data_{i}.json")
         with open(output_filename, "w") as f:
             json.dump(output_data, f, indent=2)
         print(f".json file saved to {output_filename}")
@@ -276,7 +276,7 @@ def extract_pae_matrix(pae_data):   # can extract the actual pae matrix from a v
     else:
         raise ValueError("PAE data format not recognized.")
 
-def check_clashes_in_pdb(pdb_file, threshold=2.0):   # if two atoms are closer than 2 Å are considered clashes (uses both ATOM and HEtatm lines in the .pdb)
+def check_clashes_in_pdb(pdb_file, threshold=2.0):   # if two atoms are closer than 2 Å are considered clashes (uses both ATOM and HETATM lines in the .pdb)
     atoms = []
     with open(pdb_file, 'r') as f:
         for line in f:
@@ -302,8 +302,8 @@ def output_summary_confidence(script_dir, output_folder):   # puts together all 
         ranking = json.load(f)
     iptm_ptm = ranking['iptm+ptm']
     iptm = ranking['iptm']
-    for i in range(1, 6):
-        model_name = f'model_{i}_multimer_v3_pred_0'
+    for i in range(5):
+        model_name = f'model_{i+1}_multimer_v3_pred_0'
         pkl_file = os.path.join(script_dir, f'result_{model_name}.pkl')
         with open(pkl_file, 'rb') as f:
             result = pickle.load(f)
@@ -321,7 +321,7 @@ def output_summary_confidence(script_dir, output_folder):   # puts together all 
         ptm = float(result.get('ptm', 0.0))
         iptm_val = float(result.get('iptm', iptm.get(model_name, 0.0)))
         ranking_score = float(result.get('ranking_confidence', iptm_ptm.get(model_name, 0.0)))
-        pdb_file = os.path.join(script_dir, f'ranked_{i-1}.pdb')
+        pdb_file = os.path.join(script_dir, f'ranked_{i}.pdb')
         chain_ranges, chain_order = get_chain_residue_ranges_from_pdb(pdb_file)
         pae = result.get('predicted_aligned_error', None)
         if pae is not None and len(chain_order) > 0:
@@ -338,7 +338,7 @@ def output_summary_confidence(script_dir, output_folder):   # puts together all 
             for chain in chain_order:
                 start, end = chain_ranges[chain]
                 avg_score = float(np.mean(confidence_scores[start:end]))
-                chain_iptm.append(avg_score)
+                chain_iptm.append(avg_score / 100)
         pae_pattern = os.path.join(script_dir, f'pae_{model_name}*.json')
         pae_files = glob.glob(pae_pattern)
         chain_ptm = []
@@ -350,13 +350,13 @@ def output_summary_confidence(script_dir, output_folder):   # puts together all 
         chain_pair_iptm = []
         n_chains = len(chain_order)
         if n_chains > 0 and len(chain_iptm) == n_chains and len(chain_ptm) == n_chains:
-            for i in range(n_chains):
+            for chain_i in range(n_chains):
                 row = []
-                for j in range(n_chains):
-                    if i == j:
-                        row.append(chain_ptm[i])
+                for chain_j in range(n_chains):
+                    if chain_i == chain_j:
+                        row.append(chain_ptm[chain_i])
                     else:
-                        row.append(chain_iptm[j])
+                        row.append(chain_iptm[chain_j])
                 chain_pair_iptm.append(row)
         summary = {
             "chain_iptm": chain_iptm,
@@ -371,7 +371,7 @@ def output_summary_confidence(script_dir, output_folder):   # puts together all 
             "ranking_score": ranking_score
         }
         summary = round_floats(summary, 2)  
-        unrelaxed_pdb_file = os.path.join(script_dir, f'unrelaxed_model_{i}_multimer_v3_pred_0.pdb')
+        unrelaxed_pdb_file = os.path.join(script_dir, f'unrelaxed_model_{i+1}_multimer_v3_pred_0.pdb')
         has_clash = check_clashes_in_pdb(unrelaxed_pdb_file, threshold=2.0)
         print(f"About to write: {os.path.join(output_folder, f'run_out_summary_confidences_{i}.json')}")
         with open(os.path.join(output_folder, f'run_out_summary_confidences_{i}.json'), 'w') as out:
