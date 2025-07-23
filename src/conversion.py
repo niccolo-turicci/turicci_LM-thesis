@@ -171,7 +171,7 @@ def output_full_data(script_dir, temp_folder, output_folder):   # actually creat
             "token_res_ids": token_res_ids
         }
         pdb_base = os.path.splitext(os.path.basename(pdb_path))[0]
-        output_filename = os.path.join(output_folder, f"fold_full_data_{pdb_base}.json")
+        output_filename = os.path.join(output_folder, f"run_out_full_data{i}.json")
         with open(output_filename, "w") as f:
             json.dump(output_data, f, indent=2)
         print(f".json file saved to {output_filename}")
@@ -373,7 +373,7 @@ def output_summary_confidence(script_dir, output_folder):   # puts together all 
         summary = round_floats(summary, 2)  
         unrelaxed_pdb_file = os.path.join(script_dir, f'unrelaxed_model_{i}_multimer_v3_pred_0.pdb')
         has_clash = check_clashes_in_pdb(unrelaxed_pdb_file, threshold=2.0)
-        with open(os.path.join(output_folder, f'summary_confidences_{model_name}.json'), 'w') as out:
+        with open(os.path.join(output_folder, f'run_out_summary_confidences_{i}.json'), 'w') as out:
             json.dump(convert(summary), out, indent=1)
 
 # --- 5 - Creates job_request.json file: needed for AlphaFold and other modeling jobs. ---
@@ -426,9 +426,9 @@ def output_job_request(script_dir, output_folder):
         "dialect": dialect,
         "version": version
     }]
-    with open(os.path.join(output_folder, "job_request.json"), "w") as f:
+    with open(os.path.join(output_folder, "run_out_job_request.json"), "w") as f:
         json.dump(job_request, f, indent=1)
-    print("Job request written to output_folder/job_request.json")
+    print("Job request written to output_folder/run_out_job_request.json")
 
 # --- 6 - Converts the .pdb files into .cif files to be fed into AlphaBridge ---
 def convert_pdb_to_cif(script_dir, output_folder):
@@ -442,7 +442,7 @@ def convert_pdb_to_cif(script_dir, output_folder):
     for pdb_file in pdb_files:
         structure_id = os.path.splitext(os.path.basename(pdb_file))[0]
         structure = io_pdb.get_structure(structure_id, pdb_file)
-        cif_file = os.path.join(output_folder, f"fold_model_{structure_id}.cif")
+        cif_file = os.path.join(output_folder, f"run_out_model_{structure_id}.cif")
         io_cif.set_structure(structure)
         io_cif.save(cif_file)
         print(f"Converted {pdb_file} to {cif_file}")
