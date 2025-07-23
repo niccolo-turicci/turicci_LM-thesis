@@ -373,6 +373,7 @@ def output_summary_confidence(script_dir, output_folder):   # puts together all 
         summary = round_floats(summary, 2)  
         unrelaxed_pdb_file = os.path.join(script_dir, f'unrelaxed_model_{i}_multimer_v3_pred_0.pdb')
         has_clash = check_clashes_in_pdb(unrelaxed_pdb_file, threshold=2.0)
+        print(f"About to write: {os.path.join(output_folder, f'run_out_summary_confidences_{i}.json')}")
         with open(os.path.join(output_folder, f'run_out_summary_confidences_{i}.json'), 'w') as out:
             json.dump(convert(summary), out, indent=1)
 
