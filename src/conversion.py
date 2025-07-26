@@ -480,8 +480,7 @@ def convert_pdb_to_cif(script_dir, output_folder):
         with open(cif_file, 'w') as f:
             
             # Header
-            f.write(f"data_{structure_id}_converted\n")
-            f.write("#\n")
+            f.write("This file was generated within the pipeline for converting APD output into AB input\n")
             f.write(f"_entry.id {structure_id}_converted\n")
             f.write("#\n")
             
@@ -491,7 +490,7 @@ def convert_pdb_to_cif(script_dir, output_folder):
             f.write("C \nN \nO \nS \n")
             f.write("#\n")
             
-            # aa
+            # aa definitions (header)
             f.write("loop_\n")
             f.write("_chem_comp.formula\n")
             f.write("_chem_comp.formula_weight\n")
@@ -501,8 +500,7 @@ def convert_pdb_to_cif(script_dir, output_folder):
             f.write("_chem_comp.pdbx_smiles\n")
             f.write("_chem_comp.pdbx_synonyms\n")
             f.write("_chem_comp.type\n")
-            
-            # aa definitions
+            # aa definitions (here all the informations about the standard aminoacids are stored. formula, weight, full name, smiles)
             aa_definitions = {
                 'ALA': ('"C3 H7 N O2"', '89.093', 'ALANINE', 'C[C@H](N)C(O)=O'),
                 'ARG': ('"C6 H15 N4 O2"', '175.209', 'ARGININE', 'N[C@@H](CCCNC(N)=[NH2+])C(O)=O'),
@@ -525,8 +523,7 @@ def convert_pdb_to_cif(script_dir, output_folder):
                 'TYR': ('"C9 H11 N O3"', '181.189', 'TYROSINE', 'N[C@@H](Cc1ccc(O)cc1)C(O)=O'),
                 'VAL': ('"C5 H11 N O2"', '117.146', 'VALINE', 'CC(C)[C@H](N)C(O)=O')
             }
-            
-            # Get aa from sequences
+            # Gets aa from actual sequence: it creates a set (deletes duplicates), and writes every unique aminoacid that finds
             unique_aas = set()
             for chain_data in chains_info.values():
                 unique_aas.update(chain_data['sequence'])
@@ -536,8 +533,8 @@ def convert_pdb_to_cif(script_dir, output_folder):
                     formula, weight, name, smiles = aa_definitions[aa]
                     f.write(f'{formula}    {weight}  {aa} y {name}         {smiles}                  ? "L-PEPTIDE LINKING" \n')
             f.write("#\n")
-            
-            # Other definitions (as in the AF3 output)
+
+            # Defines the entities (chains) of the file
             f.write("loop_\n")
             f.write("_entity.id\n")
             f.write("_entity.pdbx_description\n")
@@ -546,8 +543,8 @@ def convert_pdb_to_cif(script_dir, output_folder):
                 entity_id = chains_info[chain_id]['entity_id']
                 f.write(f"{entity_id} . polymer \n")
             f.write("#\n")
-            
-           
+
+            # Defines the entities (chains) of the file as before: more precisely this time
             f.write("loop_\n")
             f.write("_entity_poly.entity_id\n")
             f.write("_entity_poly.pdbx_strand_id\n")
@@ -557,7 +554,7 @@ def convert_pdb_to_cif(script_dir, output_folder):
                 f.write(f"{entity_id} {chain_id} polypeptide(L) \n")
             f.write("#\n")
             
-           
+           # For each aa in the sequence, it writes the entity ID, "n" (this is not a hetatm)", aa code, and the position 
             f.write("loop_\n")
             f.write("_entity_poly_seq.entity_id\n")
             f.write("_entity_poly_seq.hetero\n")
@@ -691,7 +688,7 @@ def convert_pdb_to_cif(script_dir, output_folder):
             f.write("#\n")
 
 
-            # Write the atomic coordinates using MMCIFIO (biopython):
+            # Write the atomic coordinates using MMCIFIO (biopython's modeule that hanldes mmCIF files):
 
             # Temporary CIF file to get the atom_site section
             temp_cif = cif_file + ".temp"
