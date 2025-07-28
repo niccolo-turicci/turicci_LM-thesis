@@ -726,21 +726,40 @@ def convert_pdb_to_cif(script_dir, output_folder):
 
             # Write the atomic coordinates using MMCIFIO (biopython's modeule that hanldes mmCIF files):
 
-            # Temporary CIF file to get the atom_site section
             temp_cif = cif_file + ".temp"
             io_cif = PDB.MMCIFIO()
             io_cif.set_structure(structure)
             io_cif.save(temp_cif)
 
-            # Read coordinates from the temp file
+            # Ensure consistent naming of chains
             with open(temp_cif, 'r') as temp_f:
                 temp_content = temp_f.read()
             
-                if '_atom_site.' in temp_content:
-                    atom_section_start = temp_content.find('loop_\n_atom_site.')
-                    if atom_section_start != -1:
-                        atom_section = temp_content[atom_section_start:]
-                        f.write(atom_section)
+            if '_atom_site.' in temp_content:
+                atom_section_start = temp_content.find('loop_\n_atom_site.')
+                if atom_section_start != -1:
+                    atom_section = temp_content[atom_section_start:]
+                    
+                    biopython_chains = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+                    original_chains = sorted(chains_info.keys())
+                    
+                    atom_lines = atom_section.split('\n')
+                    
+                    for line_idx, line in enumerate(atom_lines):
+                        if line.startswith('ATOM') or line.startswith('HETATM'):
+
+                            fields = line.split()
+                            if len(fields) >= 18:  
+                                for i, orig_chain in enumerate(original_chains):
+                                    if i < len(biopython_chains) and fields[6] == biopython_chains[i]:
+                                        fields[6] = orig_chain
+                                        break
+
+                                atom_lines[line_idx] = ' '.join(fields)
+                    
+                    atom_section = '\n'.join(atom_lines)
+                    
+                    f.write(atom_section)
             
             # Delete temp file
             if os.path.exists(temp_cif):
