@@ -403,6 +403,7 @@ def output_job_request(script_dir, output_folder):
     if not os.path.isfile(pdb_file):
         print(f"Error: {pdb_file} not found in selected directory.")
         return
+    
     # --- TO BE MODIFIED (manually) --- 
     name = "name of the job"
     modelSeeds = ["1234"]
@@ -410,16 +411,46 @@ def output_job_request(script_dir, output_folder):
     dialect = "alphafoldserver" # or AF3 (as dialect)
     version = 1
     # -----------------------
-    seqs = extract_sequence_from_pdb(pdb_file)
+    
+    # Converts the sequences to single letter (is what AB wants)
+    aa_three_to_one = {
+        'ALA': 'A', 'ARG': 'R', 'ASN': 'N', 'ASP': 'D', 'CYS': 'C',
+        'GLN': 'Q', 'GLU': 'E', 'GLY': 'G', 'HIS': 'H', 'ILE': 'I',
+        'LEU': 'L', 'LYS': 'K', 'MET': 'M', 'PHE': 'F', 'PRO': 'P',
+        'SER': 'S', 'THR': 'T', 'TRP': 'W', 'TYR': 'Y', 'VAL': 'V'
+    }
+    
+    chains = {}
+    seen = {}
+    with open(pdb_file) as f:
+        for line in f:
+            if line.startswith("ATOM"):
+                chain = line[21]
+                resn = line[17:20].strip()
+                resi = int(line[22:26])
+                key = (chain, resi)
+                if key in seen:
+                    continue
+                seen[key] = True
+                if chain not in chains:
+                    chains[chain] = []
+                if resn not in ["HOH", "WAT", "H2O"] and resn in aa_three_to_one:
+                    chains[chain].append(aa_three_to_one[resn])
+
+    # Create the job request file structure
     sequences = []
-    for chain, seq in seqs.items():
-        sequences.append({
-            "proteinChain": {
-                "sequence": seq,
-                "count": 1,
-                "useStructureTemplate": useStructureTemplate
-            }
-        })
+    for chain_id in sorted(chains.keys()):  
+        if chains[chain_id]:  # makes sure chains have residues
+            seq = ''.join(chains[chain_id])
+            sequences.append({
+                "proteinChain": {
+                    "sequence": seq,
+                    "count": 1,
+                    "useStructureTemplate": useStructureTemplate
+                }
+            })
+    
+    # Actually creates the file 
     job_request = [{
         "name": name,
         "modelSeeds": modelSeeds,
@@ -427,9 +458,14 @@ def output_job_request(script_dir, output_folder):
         "dialect": dialect,
         "version": version
     }]
+    
     with open(os.path.join(output_folder, "run_out_job_request.json"), "w") as f:
         json.dump(job_request, f, indent=1)
     print("Job request written to output_folder/run_out_job_request.json")
+    print(f"Generated job request with {len(sequences)} protein chains") #to check that everything worked
+    for i, seq_info in enumerate(sequences):
+        seq_len = len(seq_info["proteinChain"]["sequence"])
+        print(f"  Chain {i+1}: {seq_len} residues")
 
 # --- 6 - Converts the .pdb files into .cif files to be fed into AlphaBridge ---
 def convert_pdb_to_cif(script_dir, output_folder):
