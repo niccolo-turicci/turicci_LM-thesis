@@ -808,4 +808,4 @@ def renumber_files_by_iptm(output_folder):
             final_file = os.path.join(output_folder, fpattern.format(new_idx))
             if os.path.exists(temp_file):
                 os.rename(temp_file, final_file)
-                print(f"Renamed {temp_file} -> {final_file}")
+                print(f"{temp_file} renamed into {final_file}")
