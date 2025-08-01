@@ -398,14 +398,14 @@ def extract_sequence_from_pdb(pdb_path):
     seqs = {chain: ''.join(residues) for chain, residues in chains.items()}
     return seqs
 
-def output_job_request(script_dir, output_folder):
+def output_job_request(script_dir, output_folder, jobname):
     pdb_file = os.path.join(script_dir, "ranked_0.pdb")
     if not os.path.isfile(pdb_file):
         print(f"Error: {pdb_file} not found in selected directory.")
         return
     
     # --- TO BE MODIFIED (manually) --- 
-    name = "name of the job"
+    name = jobname 
     modelSeeds = ["1234"]
     useStructureTemplate = True
     dialect = "alphafoldserver" # or AF3 (as dialect)

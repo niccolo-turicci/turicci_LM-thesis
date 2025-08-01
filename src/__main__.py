@@ -8,7 +8,8 @@ def main():
     # arguments after "python -m src"
     parser.add_argument('--input', type=str, required=True, help="Path to the input folder containing the APD output.")
     parser.add_argument('--output', type=str, required=True, help="Name for output directory (both temporary and output folders are gonna be here.")
-    
+    parser.add_argument('--jobname', type=str, required=True, help="Name of the job.")
+                        
     args = parser.parse_args()
 
 
@@ -24,7 +25,7 @@ def main():
     output_contact_probabilities(args.input, temp_folder)
     output_full_data(args.input, temp_folder, output_folder)
     output_summary_confidence(args.input, output_folder)
-    output_job_request(args.input, output_folder)
+    output_job_request(args.input, output_folder, args.jobname)
     convert_pdb_to_cif(args.input, output_folder)
 
 # actual main
