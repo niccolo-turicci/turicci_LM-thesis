@@ -27,6 +27,7 @@ def main():
     output_summary_confidence(args.input, output_folder)
     output_job_request(args.input, output_folder, args.jobname)
     convert_pdb_to_cif(args.input, output_folder)
+    renumber_files_by_iptm(output_folder)
 
 # actual main
 if __name__ == "__main__":
