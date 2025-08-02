@@ -42,7 +42,7 @@ def calculate_CA_distances(pdb_path, output_name):   # looks inside the .pdb fil
                         dist = atom1 - atom2
                         dist_matrix[idx1, idx2] = dist
     np.save(output_name, dist_matrix)  # matrix saved as a .npy file
-    print(f"Distance matrix saved as {output_name}")
+    print(f"Distance matrix saved as {output_name} in temp_files folder.")
 
 def output_residue_distances(script_dir, temp_folder):
     pdb_files = [f for f in os.listdir(script_dir) if f.endswith('.pdb') and f.startswith('ranked')]
@@ -52,7 +52,7 @@ def output_residue_distances(script_dir, temp_folder):
         for pdb_file in pdb_files:
             pdb_path = os.path.join(script_dir, pdb_file)
             output_name = os.path.join(temp_folder, f"distance_matrix_{os.path.splitext(pdb_file)[0]}.npy")
-            print(f"Processing {pdb_path} ...")
+            print(f"Processing {pdb_path} structure ...")
             calculate_CA_distances(pdb_path, output_name)
 
 # --- 2.1 - Calculates contact proability based on proximity (distance_matrix), model confidence (plddt), pae (pae_matrix). ---
@@ -80,7 +80,7 @@ def output_contact_probabilities(script_dir, temp_folder):
             print(f"Skipping: {npy_pattern} or {pkl_pattern} not found.")
             continue
         pkl_path = pkl_candidates[0]
-        print(f"Processing {npy_path} with {os.path.basename(pkl_path)}")
+        print(f"Calcultaing contact probability with {npy_path} with {os.path.basename(pkl_path)}")
         distance_matrix = np.load(npy_path)
         with open(pkl_path, 'rb') as f:
             pkl_data = pickle.load(f, encoding='latin1')
@@ -90,7 +90,7 @@ def output_contact_probabilities(script_dir, temp_folder):
         output_base = os.path.join(temp_folder, f"contact_probs_ranked_{i}")
         np.save(output_base + ".npy", contact_probs)
         np.savetxt(output_base + ".csv", contact_probs, delimiter=",")
-        print(f"Output saved as {output_base}.npy and {output_base}.csv in temp_files folder")
+        print(f"Contact prob. matrix saved as {output_base}.npy and {output_base}.csv in temp_files folder")
 
 # --- 3 - Creates the full_data.json file collecting info from different confidence files. ---
 def load_pae_json(json_path):   # takes the .json file containing the pae matrix looking for the line with the pae data
@@ -152,13 +152,13 @@ def output_full_data(script_dir, temp_folder, output_folder):   # actually creat
     contact_files = sorted(glob.glob(os.path.join(temp_folder, "contact_probs_ranked_*.npy")))
     if not (len(pdb_files) == len(pae_files) == len(contact_files) == 5):
         print("Error: Expected 5 of each file type (ranked_*.pdb, pae_model_*.json, contact_probs_ranked_*.npy).")
-        print(f"Found: {len(pdb_files)} pdb, {len(pae_files)} pae, {len(contact_files)} contact files.")
+        print(f"Found: {len(pdb_files)} for the structure in .pdb format, {len(pae_files)} for pae values, {len(contact_files)} as contact files.")
         return
     for i in range(5):
         pdb_path = pdb_files[i]
         pae_path = pae_files[i]
         contact_probs_path = contact_files[i]
-        print(f"Processing:\n  PDB: {os.path.basename(pdb_path)}\n  PAE: {os.path.basename(pae_path)}\n  CONTACT: {os.path.basename(contact_probs_path)}")
+        print(f"Creating full_data using:\n  as PDB: {os.path.basename(pdb_path)}\n  as PAE matrix : {os.path.basename(pae_path)}\n  for CONTACT PROB: {os.path.basename(contact_probs_path)}")
         pae_matrix = load_pae_json(pae_path)
         contact_matrix = np.load(contact_probs_path).tolist()
         atom_chain_ids, atom_plddts, token_chain_ids, token_res_ids = parse_pdb(pdb_path)
@@ -174,7 +174,7 @@ def output_full_data(script_dir, temp_folder, output_folder):   # actually creat
         output_filename = os.path.join(output_folder, f"run_out_full_data_{i}.json")
         with open(output_filename, "w") as f:
             json.dump(output_data, f, indent=2)
-        print(f".json file saved to {output_filename}")
+        print(f"fulla_data.json file saved to {output_filename}")
         validate_output_json(output_filename)
 
 # --- 4 - Creates summary_confidence.json file ---
@@ -373,7 +373,7 @@ def output_summary_confidence(script_dir, output_folder):   # puts together all 
         summary = round_floats(summary, 2)  
         unrelaxed_pdb_file = os.path.join(script_dir, f'unrelaxed_model_{i+1}_multimer_v3_pred_0.pdb')
         has_clash = check_clashes_in_pdb(unrelaxed_pdb_file, threshold=2.0)
-        print(f"Writing: {os.path.join(output_folder, f'run_out_summary_confidences_{i}.json')}")
+        print(f"Writing summary_confidences: {os.path.join(output_folder, f'run_out_summary_confidences_{i}.json')}")
         with open(os.path.join(output_folder, f'run_out_summary_confidences_{i}.json'), 'w') as out:
             json.dump(convert(summary), out, indent=1)
 
@@ -404,8 +404,9 @@ def output_job_request(script_dir, output_folder, jobname):
         print(f"Error: {pdb_file} not found in selected directory.")
         return
     
-    # --- TO BE MODIFIED (manually) --- 
+    # heading (jobname = --jobname)
     name = jobname 
+    # --- TO BE MODIFIED (manually) --- 
     modelSeeds = ["1234"]
     useStructureTemplate = True
     dialect = "alphafoldserver" # or AF3 (as dialect)
@@ -461,8 +462,7 @@ def output_job_request(script_dir, output_folder, jobname):
     
     with open(os.path.join(output_folder, "run_out_job_request.json"), "w") as f:
         json.dump(job_request, f, indent=1)
-    print("Job request written to output_folder/run_out_job_request.json")
-    print(f"Generated job request with {len(sequences)} protein chains") #to check that everything worked
+    print("job_request.json (with {len(sequences)} protein chains) written to output_folder/run_out_job_request.json")
     for i, seq_info in enumerate(sequences):
         seq_len = len(seq_info["proteinChain"]["sequence"])
         print(f"  Chain {i+1}: {seq_len} residues")
@@ -765,7 +765,7 @@ def convert_pdb_to_cif(script_dir, output_folder):
             if os.path.exists(temp_cif):
                 os.remove(temp_cif)
         
-        print(f"Converted {pdb_file} to {cif_file} with proper format")
+        print(f"{pdb_file} converted to {cif_file}")
 
 # --- 7 - Renames the files based on the iptm score (summary_confidences file) ---
 
@@ -808,4 +808,4 @@ def renumber_files_by_iptm(output_folder):
             final_file = os.path.join(output_folder, fpattern.format(new_idx))
             if os.path.exists(temp_file):
                 os.rename(temp_file, final_file)
-                print(f"{temp_file} renamed into {final_file}")
+                print(f"{temp_file} renamed into {final_file} based on iptm")
