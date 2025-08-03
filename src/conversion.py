@@ -242,12 +242,17 @@ def compute_chain_pair_pae_min(pae, chain_ranges, chain_order):   # creates a ma
     return pae_min
 
 def compute_chain_ptm_from_pae(pae_matrix, chain_ranges, chain_order):   # converts the average pae value for each chain into a ptm score (formula derived from AlphaFold)
+    
+    # here I calculate the values needed for the ptm_score formula (d0)
+    L_target = pae_matrix.shape[0]
+    d0 = 1.24 * np.cbrt(L_target - 15) - 1.8
+    
     chain_ptm = []
     for chain in chain_order:
         start, end = chain_ranges[chain]
         submatrix = pae_matrix[start:end, start:end]
         avg_pae = np.mean(submatrix)
-        ptm_score = 1 / (1 + (avg_pae / 31))
+        ptm_score = 1 / (1 + (avg_pae / d0)) #d0 value is a parameter based on total protein lenght
         chain_ptm.append(ptm_score)
     return chain_ptm
 
