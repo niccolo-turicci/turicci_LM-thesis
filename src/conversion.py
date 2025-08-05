@@ -100,7 +100,7 @@ def load_pae_json(json_path):   # takes the .json file containing the pae matrix
             first = data[0]
             if "predicted_aligned_error" in first:
                 return first["predicted_aligned_error"]
-        raise ValueError("PAE matrix not found in JSON structure.")
+        raise ValueError("PAE matrix not found in JSON file.")
 
 def parse_pdb(pdb_path):   # looks for chain IDs, plddt scores (for each atom), residue chain IDs and residue numbers inside the .pdb file
     atom_chain_ids = []
