@@ -58,7 +58,7 @@ def output_residue_distances(script_dir, temp_folder):
 # --- 2.1 - Calculates contact proability based on proximity (distance_matrix), model confidence (plddt), pae (pae_matrix). ---
 def compute_contact_probabilities(distance_matrix, pae_matrix, plddt, threshold=8.0):
     plddt_norm = np.clip(plddt / 100.0, 0, 1)   # transforms plddt from 1-100 values to 0-1 values
-    pairwise_plddt = (plddt_norm[:, None] + plddt_norm[None, :]) / 2.0   # calculates plddt mean for each residue pair
+    pairwise_plddt = np.sqrt(plddt_norm[:, None] * plddt_norm[None, :])   # calculates plddt geometric mean for each residue pair
     pae_conf = expit(-(pae_matrix - threshold) / 1.5)   # using a sigmoid function converts pae score into a confidence score: treshold for contact is set at 8 Å
     within_threshold = (distance_matrix <= threshold).astype(float)   
     contact_probs = within_threshold * pae_conf * pairwise_plddt   # combines the confidence values into a single value for each res pair: returns a matrix called contact_probs
