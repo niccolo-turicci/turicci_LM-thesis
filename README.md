@@ -15,4 +15,4 @@ The goal is to create a protocol for efficient PPI prediction and validation by 
 ## Command usage
 ### Converting APD output to ABridge
 ```python
-python -m src --input ./your/input/folder --output ./your/output/folder --jobname nameofthejob
+python -m src --input ./your/input/folder --output ./your/output/folder --jobname nameofjob
