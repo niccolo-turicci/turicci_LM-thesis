@@ -49,7 +49,7 @@ def output_residue_distances(script_dir, temp_folder):
             print(f"Processing {pdb_path} structure ...")
             calculate_CA_distances(pdb_path, output_name)
 
-# --- 2.1 - Calculates contact proability based on proximity (distance_matrix), model confidence (plddt), pae (pae_matrix). ---
+# --- 2.1 - Create the function to calculate contact proability based on proximity (distance_matrix), model confidence (plddt), pae (pae_matrix). ---
 def compute_contact_probabilities(distance_matrix, pae_matrix, plddt, threshold=8.0):
     plddt_norm = np.clip(plddt / 100.0, 0, 1)   # transforms plddt from 1-100 values to 0-1 values
     pairwise_plddt = np.sqrt(plddt_norm[:, None] * plddt_norm[None, :])   # calculates plddt geometric mean for each residue pair
