@@ -1,11 +1,11 @@
 import os
 import json
 
-# --- 5 - Creates job_request.json file: needed for AlphaFold and other modeling jobs. ---
-def extract_sequence_from_pdb(pdb_path):
+# --- 5 - Creates job_request.json file: needed for AlphaFold and other modeling jobs (in our case for ABridge). ---
+def extract_sequence_from_pdb(pdb_path): # it looks inside the .pdb for reconstructing the aminoacid sequence
     chains = {}
     seen = {}
-    with open(pdb_path) as f:
+    with open(pdb_path) as f: # as for the full_data it looks inside the .pdb file at specific positions in each ATOM line
         for line in f:
             if line.startswith("ATOM"):
                 chain = line[21]
@@ -35,7 +35,7 @@ def output_job_request(script_dir, output_folder, jobname):
     useStructureTemplate = True
     dialect = "alphafoldserver" # or AF3 (as dialect)
     version = 1
-    # -----------------------
+    # ---------------------------------
     
     # Converts the sequences to single letter (is what AB wants)
     aa_three_to_one = {
@@ -75,7 +75,7 @@ def output_job_request(script_dir, output_folder, jobname):
                 }
             })
     
-    # Actually creates the file 
+    # Fills the fuelds of the file 
     job_request = [{
         "name": name,
         "modelSeeds": modelSeeds,
