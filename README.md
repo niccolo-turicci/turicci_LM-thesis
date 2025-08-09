@@ -4,7 +4,7 @@ This is the repository with the code for my Master's degree thesis in Molecular 
 ## Aim of the thesis
 The goal is to create a protocol for efficient PPI prediction and validation by integrating two tools: AlphaPullDown (APD) and AlphaBridge (AB). It includes benchmarking of the two separate tools (AlphaPullDown and AlphaBridge) and creating a script that makes the intergration between the two seamless. 
 
-## Ideal workflow
+# Ideal workflow
 ![Workflow scheme](images/workflow.png)
 1- produce PPI predictions (via APD)
 
@@ -12,6 +12,7 @@ The goal is to create a protocol for efficient PPI prediction and validation by 
 
 3- run AB to get the plots
 
+## 1. AlphaPullDown (APD)
 ## 2. APD output conversion (APD -> AB)
 There are several scripts, specific for every new file that has to be created.
 Each script is commented and explained internally. 
@@ -24,9 +25,16 @@ Each script is commented and explained internally.
   ### pdb_to_cif.py
   This converts the .pdb structures into .cif (AF3-like) format; the only one accepted by AlphaBridge. 
   ### ranking.py
-  This script renames each summary_confidences.json , and all the realtive files accordingly, based on the ipTM score. In this way ABridge uses the more confident structure to operate. 
+  This script renames each summary_confidences.json , and all the realtive files accordingly, based on the ipTM score. In this way ABridge uses the structure with the most confident interface to operate. 
+## 3. AlphaBridge (AB)
 
-## Command usage
-### Converting APD output to ABridge
+# Command usage
+## Converting APD output to ABridge
 ```python
 python -m src --input ./your/input/folder --output ./your/output/folder --jobname nameofjob
+```
+_--input_ the folder with the APD output
+
+_--output_ where to save the code output (converted folder). It will create output_folder and temp_folder inside the specified one. 
+
+_--jobname_ nem of the job to assure reproducibility, trackability and consistency.
