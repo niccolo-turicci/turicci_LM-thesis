@@ -125,7 +125,7 @@ def convert_pdb_to_cif(script_dir, output_folder):
                 f.write(f"{entity_id} {chain_id} polypeptide(L) \n")
             f.write("#\n")
             
-           # For each aa in the sequence, it writes the entity ID, "n" (this is not a hetatm)", aa code, and the position 
+           # For each aa in the sequence, it writes the entity ID, "n" (this is not a HETATM), aa code, and the position 
             f.write("loop_\n")
             f.write("_entity_poly_seq.entity_id\n")
             f.write("_entity_poly_seq.hetero\n")
@@ -138,13 +138,13 @@ def convert_pdb_to_cif(script_dir, output_folder):
                     f.write(f"{entity_id} n {aa} {i}    \n")
             f.write("#\n")
             
-            
+            # data about coordinates
             f.write("_ma_data.content_type \"model coordinates\"\n")
             f.write("_ma_data.id           1\n")
             f.write("_ma_data.name         Model\n")
             f.write("#\n")
             
-            
+            # defines the model list: this is an AlphaFold model (ab initio)
             f.write("_ma_model_list.data_id          1\n")
             f.write("_ma_model_list.model_group_id   1\n")
             f.write("_ma_model_list.model_group_name \"AlphaFold model\"\n")
@@ -154,7 +154,7 @@ def convert_pdb_to_cif(script_dir, output_folder):
             f.write("_ma_model_list.ordinal_id       1\n")
             f.write("#\n")
             
-            
+            # what were the steps: MSA, template search, etc. 
             f.write("loop_\n")
             f.write("_ma_protocol_step.method_type\n")
             f.write("_ma_protocol_step.ordinal_id\n")
@@ -165,7 +165,7 @@ def convert_pdb_to_cif(script_dir, output_folder):
             f.write("modeling          3 1 3 \n")
             f.write("#\n")
             
-            
+            # describe the pLDDT metrics
             f.write("loop_\n")
             f.write("_ma_qa_metric.id\n")
             f.write("_ma_qa_metric.mode\n")
@@ -176,20 +176,20 @@ def convert_pdb_to_cif(script_dir, output_folder):
             f.write("2 local  pLDDT 1 pLDDT \n")
             f.write("#\n")
             
-            
+            # specify global quality (default to 75.00)
             f.write("_ma_qa_metric_global.metric_id    1\n")
             f.write("_ma_qa_metric_global.metric_value 75.00\n")
             f.write("_ma_qa_metric_global.model_id     1\n")
             f.write("_ma_qa_metric_global.ordinal_id   1\n")
             f.write("#\n")
             
-            
+            # software (AlphaFold) information
             f.write("_ma_software_group.group_id    1\n")
             f.write("_ma_software_group.ordinal_id  1\n")
             f.write("_ma_software_group.software_id 1\n")
             f.write("#\n")
             
-            
+            # defines which entities (chains) there are in the file
             f.write("loop_\n")
             f.write("_ma_target_entity.data_id\n")
             f.write("_ma_target_entity.entity_id\n")
@@ -199,7 +199,7 @@ def convert_pdb_to_cif(script_dir, output_folder):
                 f.write(f"1 {entity_id} . \n")
             f.write("#\n")
             
-            
+            # links chain ID to entity ID
             f.write("loop_\n")
             f.write("_ma_target_entity_instance.asym_id\n")
             f.write("_ma_target_entity_instance.details\n")
@@ -209,7 +209,7 @@ def convert_pdb_to_cif(script_dir, output_folder):
                 f.write(f"{chain_id} . {entity_id} \n")
             f.write("#\n")
             
-            
+            # commercial-use information
             f.write("loop_\n")
             f.write("_pdbx_data_usage.details\n")
             f.write("_pdbx_data_usage.id\n")
@@ -220,7 +220,7 @@ def convert_pdb_to_cif(script_dir, output_folder):
             f.write("; 1 \"Terms of use\" https://alphafoldserver.com/output-terms \n")
             f.write("#\n")
             
-            
+            # code details (here "Converted from PDB")
             f.write("_software.classification other\n")
             f.write("_software.date           ?\n")
             f.write("_software.description    \"Structure prediction\"\n")
@@ -230,7 +230,7 @@ def convert_pdb_to_cif(script_dir, output_folder):
             f.write("_software.version        \"Converted from PDB\"\n")
             f.write("#\n")
             
-            
+            # maps entity ID to chain ID in the file
             f.write("loop_\n")
             f.write("_struct_asym.entity_id\n")
             f.write("_struct_asym.id\n")
@@ -239,7 +239,7 @@ def convert_pdb_to_cif(script_dir, output_folder):
                 f.write(f"{entity_id} {chain_id} \n")
             f.write("#\n")
 
-            # The middle section
+            # The middle section: sequence scheme 
             f.write("loop_\n")
             f.write("_pdbx_poly_seq_scheme.asym_id\n")
             f.write("_pdbx_poly_seq_scheme.auth_seq_num\n")
