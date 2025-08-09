@@ -39,7 +39,7 @@ def calculate_CA_distances(pdb_path, output_name):   # looks inside the .pdb fil
     print(f"Distance matrix saved as {output_name} in temp_files folder.")
 
 def output_residue_distances(script_dir, temp_folder):
-    pdb_files = [f for f in os.listdir(script_dir) if f.endswith('.pdb') and f.startswith('ranked')]
+    pdb_files = [f for f in os.listdir(script_dir) if f.endswith('.pdb') and f.startswith('ranked')] # only looks for "ranked_X.pdb" structures
     if not pdb_files:
         print("no .pdb files found")
     else:
@@ -50,10 +50,10 @@ def output_residue_distances(script_dir, temp_folder):
             calculate_CA_distances(pdb_path, output_name)
 
 # --- 2.1 - Create the function to calculate contact proability based on proximity (distance_matrix), model confidence (plddt), pae (pae_matrix). ---
-def compute_contact_probabilities(distance_matrix, pae_matrix, plddt, threshold=8.0):
+def compute_contact_probabilities(distance_matrix, pae_matrix, plddt, threshold=8.0): 
     plddt_norm = np.clip(plddt / 100.0, 0, 1)   # transforms plddt from 1-100 values to 0-1 values
     pairwise_plddt = np.sqrt(plddt_norm[:, None] * plddt_norm[None, :])   # calculates plddt geometric mean for each residue pair
-    pae_conf = expit(-(pae_matrix - threshold) / 1.5)   # using a sigmoid function converts pae score into a confidence score: treshold for contact is set at 8 Å
+    pae_conf = expit(-(pae_matrix - threshold) / 1.5)   # using a sigmoid function converts pae score into a confidence score: treshold for possible contact is set at 8 Å
     within_threshold = (distance_matrix <= threshold).astype(float)   
     contact_probs = within_threshold * pae_conf * pairwise_plddt   # combines the confidence values into a single value for each res pair: returns a matrix called contact_probs
     return contact_probs
@@ -65,7 +65,7 @@ def output_contact_probabilities(script_dir, temp_folder):
     if not npy_files or not pkl_files:
         print("No .npy or .pkl files found in the temp or input directory.")
         return
-    for i in range(5):   # loops over all the 5 models produced by APD
+    for i in range(5):   # loops over all the 5 models produced by APD (ranked_X.pdb)
         npy_pattern = f"distance_matrix_ranked_{i}.npy"
         pkl_pattern = f"result_model_{i+1}_*.pkl"
         npy_path = os.path.join(temp_folder, npy_pattern)
@@ -74,7 +74,7 @@ def output_contact_probabilities(script_dir, temp_folder):
             print(f"Skipping: {npy_pattern} or {pkl_pattern} not found.")
             continue
         pkl_path = pkl_candidates[0]
-        print(f"Calcultaing contact probability with {npy_path} with {os.path.basename(pkl_path)}")
+        print(f"Calcultaing contact probability with {npy_path} and {os.path.basename(pkl_path)}")
         distance_matrix = np.load(npy_path)
         with open(pkl_path, 'rb') as f:
             pkl_data = pickle.load(f, encoding='latin1')
@@ -104,10 +104,10 @@ def parse_pdb(pdb_path):   # looks for chain IDs, plddt scores (for each atom), 
     seen_residues = set()
     with open(pdb_path, 'r') as f:
         for line in f:
-            if line.startswith("ATOM"):
-                chain_id = line[21].strip()
-                res_id = int(line[22:26].strip())
-                b_factor = float(line[60:66].strip())
+            if line.startswith("ATOM"): # looks inside the lines with ATOM (ignores HETATM)
+                chain_id = line[21].strip() # chain_id is found at position 21
+                res_id = int(line[22:26].strip()) # residue_id is found at position 22-26
+                b_factor = float(line[60:66].strip()) # b-factor (our pLDDT) is found at position 60-66
                 atom_chain_ids.append(chain_id)
                 atom_plddts.append(b_factor)
                 res_key = (chain_id, res_id)
@@ -117,7 +117,7 @@ def parse_pdb(pdb_path):   # looks for chain IDs, plddt scores (for each atom), 
                     seen_residues.add(res_key)
     return atom_chain_ids, atom_plddts, token_chain_ids, token_res_ids
 
-def validate_output_json(filepath):   # not actually necessary: can be commented out 
+def validate_output_json(filepath):   # Checks if the final file has a valid structure: not actually necessary, can be commented out 
     expected_keys = {
         "atom_chain_ids",
         "atom_plddts",
@@ -140,7 +140,7 @@ def validate_output_json(filepath):   # not actually necessary: can be commented
     except Exception as e:
         print(f"Error in .json file structure: {e}")
 
-def output_full_data(script_dir, temp_folder, output_folder):   # actually creates the full_data.json; for each model
+def output_full_data(script_dir, temp_folder, output_folder):   # actually creates the full_data.json; collects all the computed info for each model
     pdb_files = sorted(glob.glob(os.path.join(script_dir, "ranked_*.pdb")))
     pae_files = sorted(glob.glob(os.path.join(script_dir, "pae_model_*.json")))
     contact_files = sorted(glob.glob(os.path.join(temp_folder, "contact_probs_ranked_*.npy")))
