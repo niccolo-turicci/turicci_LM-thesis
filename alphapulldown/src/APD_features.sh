@@ -13,11 +13,9 @@ cd /home/piccinno/turicci_LMthesis
 
 ####
 create_individual_features.py \
---fasta_paths=example_1_sequences.fasta \
---data_dir=/scratch/AlphaFold_DBs/2.3.2 \
---output_dir=/scratch/mydir/test_AlphaPulldown/ \
+--fasta_paths=gpcr_pika_protein_list.fasta \
+--data_dir=/home/shared/alphafold_db \
+--output_dir=/home/piccinno/turicci_LMthesis/test_AlphaPulldown/gpcr_pika \
 --max_template_date=2050-01-01 \
 --skip_existing=True \
---use_mmseqs2=True \
---seq_index=$SLURM_ARRAY_TASK_ID
 #####
