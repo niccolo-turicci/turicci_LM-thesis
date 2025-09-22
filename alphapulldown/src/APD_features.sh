@@ -18,4 +18,6 @@ create_individual_features.py \
 --output_dir=/home/piccinno/turicci_LMthesis/test_AlphaPulldown/gpcr_pika \
 --max_template_date=2050-01-01 \
 --skip_existing=True \
+--use_mmseqs2=True
 #####
+
