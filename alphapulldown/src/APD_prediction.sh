@@ -27,11 +27,11 @@ export TF_FORCE_UNIFIED_MEMORY='1'
 # CUSTOMIZE THE FOLLOWING SCRIPT PARAMETERS FOR YOUR SPECIFIC TASK:
 ####
 run_multimer_jobs.py \
---mode=pulldown \ 
---monomer_objects_dir=/home/piccinno/turicci_LMthesis/test_AlphaPulldown/5BV1-2 \ #features folder
---protein_lists=$1,/home/piccinno/turicci_LMthesis/protein_list_5bv1-1.txt, /home/piccinno/turicci_LMthesis/protein_list_5bv1-2.txt \ #proten list (or lists)
---output_path=/home/piccinno/turicci_LMthesis/test_AlphaPulldown/5BV1-2_predictions \ #output folder
---data_dir=/home/shared/alphafold_db \ #AF database path
+--mode=pulldown \
+--monomer_objects_dir=/home/piccinno/turicci_LMthesis/test_AlphaPulldown/5BV1-2 \
+--protein_lists=/home/piccinno/turicci_LMthesis/protein_list_5bv1-1.txt,/home/piccinno/turicci_LMthesis/protein_list_5bv1-2.txt \
+--output_path=/home/piccinno/turicci_LMthesis/test_AlphaPulldown/5BV1-2_predictions \
+--data_dir=/home/shared/alphafold_db \
 --num_cycle=3 \
 --job_index=${SLURM_ARRAY_TASK_ID:-0}
 ####
