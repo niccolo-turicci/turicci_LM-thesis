@@ -13,6 +13,8 @@ The goal is to create a protocol for efficient PPI prediction and validation by 
 3- run AB to get the plots
 
 ## 1. AlphaPullDown (APD)
+Need to run on **HPC** with a **batch job**; so it needs **job request scripts**. 
+These script are in the `turicci_LM-thesis/alphapulldown/src` folder. There's one for running APD in _custom_ mode and one for _pulldown_ mode.  
 ## 2. APD output conversion (APD -> AB)
 There are several scripts, specific for every new file that has to be created.
 Each script is commented and explained internally. 
