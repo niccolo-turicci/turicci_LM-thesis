@@ -52,6 +52,7 @@ def convert_pdb_to_cif(script_dir, output_folder):
             
             # Header
             f.write("This file was generated within the pipeline for converting APD output into AB input\n")
+            f.write("data_ {structure_id} ")
             f.write(f"_entry.id {structure_id}_converted\n")
             f.write("#\n")
             
