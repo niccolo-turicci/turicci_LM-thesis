@@ -52,7 +52,10 @@ def convert_pdb_to_cif(script_dir, output_folder):
             
             # Header
             f.write("This file was generated within the pipeline for converting APD output into AB input\n")
-            f.write(f"data_ {structure_id}\n ")
+            # Ensure the `data_` block is correctly formatted and does not contain trailing spaces or invalid characters.
+            structure_id_clean = structure_id.replace(" ", "_").replace("-", "_")  # Replace spaces or dashes with underscores
+            f.write(f"data_{structure_id_clean}\n")
+            f.write("#\n")
             f.write(f"_entry.id {structure_id}_converted\n")
             f.write("#\n")
             

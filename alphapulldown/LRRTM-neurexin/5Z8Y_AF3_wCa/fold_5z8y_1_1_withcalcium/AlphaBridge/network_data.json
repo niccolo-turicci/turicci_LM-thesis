@@ -1,0 +1,144 @@
+{
+    "network at 0.5": {
+        "cut-off": 0.5,
+        "network_not_merged": {
+            "directed": false,
+            "multigraph": false,
+            "graph": {},
+            "nodes": [
+                {
+                    "label": "A (np.int64(310)-np.int64(315)) (np.int64(319)-np.int64(323))",
+                    "label_asym_id": "A",
+                    "color": "#8000ff",
+                    "_igraph_index": 0,
+                    "id": 0
+                },
+                {
+                    "label": "B (np.int64(27)) (np.int64(55)-np.int64(56)) (np.int64(122)-np.int64(129)) (np.int64(75)-np.int64(76))",
+                    "label_asym_id": "B",
+                    "color": "#80ffb4",
+                    "_igraph_index": 1,
+                    "id": 1
+                }
+            ],
+            "links": [
+                {
+                    "weight": 500,
+                    "color": "black",
+                    "width": 1.5,
+                    "interaction": "I1",
+                    "_igraph_index": 0,
+                    "source": 0,
+                    "target": 1
+                }
+            ]
+        },
+        "protein_network": {
+            "directed": false,
+            "multigraph": false,
+            "graph": {},
+            "nodes": [
+                {
+                    "label": "A",
+                    "label_asym_id": "A",
+                    "color": "#8000ff",
+                    "_igraph_index": 0,
+                    "id": 0
+                },
+                {
+                    "label": "B",
+                    "label_asym_id": "B",
+                    "color": "#80ffb4",
+                    "_igraph_index": 1,
+                    "id": 1
+                }
+            ],
+            "links": [
+                {
+                    "color": "black",
+                    "interaction": [
+                        "I1"
+                    ],
+                    "label": 0.86,
+                    "_igraph_index": 0,
+                    "source": 0,
+                    "target": 1
+                }
+            ]
+        }
+    },
+    "network at 0.75": {
+        "cut-off": 0.75,
+        "network_not_merged": {
+            "directed": false,
+            "multigraph": false,
+            "graph": {},
+            "nodes": [
+                {
+                    "label": "A (np.int64(310)-np.int64(315)) (np.int64(319)-np.int64(322))",
+                    "label_asym_id": "A",
+                    "color": "#8000ff",
+                    "_igraph_index": 0,
+                    "id": 0
+                },
+                {
+                    "label": "B (np.int64(27)) (np.int64(55)) (np.int64(122)-np.int64(128))",
+                    "label_asym_id": "B",
+                    "color": "#80ffb4",
+                    "_igraph_index": 1,
+                    "id": 1
+                }
+            ],
+            "links": [
+                {
+                    "weight": 500,
+                    "color": "black",
+                    "width": 1.5,
+                    "interaction": "I1",
+                    "_igraph_index": 0,
+                    "source": 0,
+                    "target": 1
+                }
+            ]
+        },
+        "protein_network": {
+            "directed": false,
+            "multigraph": false,
+            "graph": {},
+            "nodes": [
+                {
+                    "label": "A",
+                    "label_asym_id": "A",
+                    "color": "#8000ff",
+                    "_igraph_index": 0,
+                    "id": 0
+                },
+                {
+                    "label": "B",
+                    "label_asym_id": "B",
+                    "color": "#80ffb4",
+                    "_igraph_index": 1,
+                    "id": 1
+                }
+            ],
+            "links": [
+                {
+                    "color": "black",
+                    "interaction": [
+                        "I1"
+                    ],
+                    "label": 0.86,
+                    "_igraph_index": 0,
+                    "source": 0,
+                    "target": 1
+                }
+            ]
+        }
+    },
+    "network at 0.9": {},
+    "label_asym_ids": [
+        "A",
+        "B",
+        "C"
+    ]
+}

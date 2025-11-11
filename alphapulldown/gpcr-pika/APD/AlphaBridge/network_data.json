@@ -1,0 +1,416 @@
+{
+    "network at 0.5": {
+        "cut-off": 0.5,
+        "network_not_merged": {
+            "directed": false,
+            "multigraph": false,
+            "graph": {},
+            "nodes": [
+                {
+                    "label": "D (np.int64(43)-np.int64(62)) (np.int64(73)-np.int64(86)) (np.int64(117)-np.int64(124)) (np.int64(145)-np.int64(158)) (np.int64(167)-np.int64(169))",
+                    "label_asym_id": "D",
+                    "color": "#d4dd80",
+                    "_igraph_index": 0,
+                    "id": 0
+                },
+                {
+                    "label": "E (np.int64(43)-np.int64(62)) (np.int64(74)-np.int64(87)) (np.int64(145)-np.int64(158)) (np.int64(167)-np.int64(169)) (np.int64(117)-np.int64(124))",
+                    "label_asym_id": "E",
+                    "color": "#ff0000",
+                    "_igraph_index": 1,
+                    "id": 1
+                }
+            ],
+            "links": [
+                {
+                    "weight": 500,
+                    "color": "black",
+                    "width": 1.5,
+                    "interaction": "I1",
+                    "_igraph_index": 0,
+                    "source": 0,
+                    "target": 1
+                }
+            ]
+        },
+        "protein_network": {
+            "directed": false,
+            "multigraph": false,
+            "graph": {},
+            "nodes": [
+                {
+                    "label": "D",
+                    "label_asym_id": "D",
+                    "color": "#d4dd80",
+                    "_igraph_index": 0,
+                    "id": 0
+                },
+                {
+                    "label": "E",
+                    "label_asym_id": "E",
+                    "color": "#ff0000",
+                    "_igraph_index": 1,
+                    "id": 1
+                }
+            ],
+            "links": [
+                {
+                    "color": "black",
+                    "interaction": [
+                        "I1"
+                    ],
+                    "label": 0.96,
+                    "_igraph_index": 0,
+                    "source": 0,
+                    "target": 1
+                }
+            ]
+        }
+    },
+    "network at 0.75": {
+        "cut-off": 0.75,
+        "network_not_merged": {
+            "directed": false,
+            "multigraph": false,
+            "graph": {},
+            "nodes": [
+                {
+                    "label": "D (np.int64(43)-np.int64(62)) (np.int64(74)-np.int64(86)) (np.int64(167)-np.int64(169))",
+                    "label_asym_id": "D",
+                    "color": "#d4dd80",
+                    "_igraph_index": 0,
+                    "id": 0
+                },
+                {
+                    "label": "D (np.int64(117)-np.int64(124))",
+                    "label_asym_id": "D",
+                    "color": "#d4dd80",
+                    "_igraph_index": 1,
+                    "id": 1
+                },
+                {
+                    "label": "D (np.int64(145)-np.int64(155))",
+                    "label_asym_id": "D",
+                    "color": "#d4dd80",
+                    "_igraph_index": 2,
+                    "id": 2
+                },
+                {
+                    "label": "E (np.int64(43)-np.int64(62)) (np.int64(74)-np.int64(87)) (np.int64(167)-np.int64(169))",
+                    "label_asym_id": "E",
+                    "color": "#ff0000",
+                    "_igraph_index": 3,
+                    "id": 3
+                },
+                {
+                    "label": "E (np.int64(145)-np.int64(155))",
+                    "label_asym_id": "E",
+                    "color": "#ff0000",
+                    "_igraph_index": 4,
+                    "id": 4
+                },
+                {
+                    "label": "E (np.int64(117)-np.int64(124))",
+                    "label_asym_id": "E",
+                    "color": "#ff0000",
+                    "_igraph_index": 5,
+                    "id": 5
+                }
+            ],
+            "links": [
+                {
+                    "weight": 500,
+                    "color": "black",
+                    "width": 1.5,
+                    "interaction": "I1",
+                    "_igraph_index": 0,
+                    "source": 0,
+                    "target": 3
+                },
+                {
+                    "weight": 3,
+                    "color": "#d4dd80",
+                    "width": 0.5,
+                    "_igraph_index": 3,
+                    "source": 0,
+                    "target": 1,
+                    "label_asym_id": "D"
+                },
+                {
+                    "weight": 3,
+                    "color": "#d4dd80",
+                    "width": 0.5,
+                    "_igraph_index": 4,
+                    "source": 0,
+                    "target": 2,
+                    "label_asym_id": "D"
+                },
+                {
+                    "weight": 500,
+                    "color": "black",
+                    "width": 1.5,
+                    "interaction": "I2",
+                    "_igraph_index": 1,
+                    "source": 1,
+                    "target": 4
+                },
+                {
+                    "weight": 3,
+                    "color": "#d4dd80",
+                    "width": 0.5,
+                    "_igraph_index": 5,
+                    "source": 1,
+                    "target": 2,
+                    "label_asym_id": "D"
+                },
+                {
+                    "weight": 500,
+                    "color": "black",
+                    "width": 1.5,
+                    "interaction": "I3",
+                    "_igraph_index": 2,
+                    "source": 2,
+                    "target": 5
+                },
+                {
+                    "weight": 3,
+                    "color": "#ff0000",
+                    "width": 0.5,
+                    "_igraph_index": 6,
+                    "source": 3,
+                    "target": 4,
+                    "label_asym_id": "E"
+                },
+                {
+                    "weight": 3,
+                    "color": "#ff0000",
+                    "width": 0.5,
+                    "_igraph_index": 7,
+                    "source": 3,
+                    "target": 5,
+                    "label_asym_id": "E"
+                },
+                {
+                    "weight": 3,
+                    "color": "#ff0000",
+                    "width": 0.5,
+                    "_igraph_index": 8,
+                    "source": 4,
+                    "target": 5,
+                    "label_asym_id": "E"
+                }
+            ]
+        },
+        "protein_network": {
+            "directed": false,
+            "multigraph": false,
+            "graph": {},
+            "nodes": [
+                {
+                    "label": "D",
+                    "label_asym_id": "D",
+                    "color": "#d4dd80",
+                    "_igraph_index": 0,
+                    "id": 0
+                },
+                {
+                    "label": "E",
+                    "label_asym_id": "E",
+                    "color": "#ff0000",
+                    "_igraph_index": 1,
+                    "id": 1
+                }
+            ],
+            "links": [
+                {
+                    "color": "black",
+                    "interaction": [
+                        "I1",
+                        "I2",
+                        "I3"
+                    ],
+                    "label": 0.96,
+                    "_igraph_index": 0,
+                    "source": 0,
+                    "target": 1
+                }
+            ]
+        }
+    },
+    "network at 0.9": {
+        "cut-off": 0.9,
+        "network_not_merged": {
+            "directed": false,
+            "multigraph": false,
+            "graph": {},
+            "nodes": [
+                {
+                    "label": "D (np.int64(43)-np.int64(58)) (np.int64(75)-np.int64(86)) (np.int64(167))",
+                    "label_asym_id": "D",
+                    "color": "#d4dd80",
+                    "_igraph_index": 0,
+                    "id": 0
+                },
+                {
+                    "label": "D (np.int64(117)-np.int64(122))",
+                    "label_asym_id": "D",
+                    "color": "#d4dd80",
+                    "_igraph_index": 1,
+                    "id": 1
+                },
+                {
+                    "label": "D (np.int64(146)-np.int64(151))",
+                    "label_asym_id": "D",
+                    "color": "#d4dd80",
+                    "_igraph_index": 2,
+                    "id": 2
+                },
+                {
+                    "label": "E (np.int64(43)-np.int64(58)) (np.int64(75)-np.int64(86)) (np.int64(167))",
+                    "label_asym_id": "E",
+                    "color": "#ff0000",
+                    "_igraph_index": 3,
+                    "id": 3
+                },
+                {
+                    "label": "E (np.int64(146)-np.int64(151))",
+                    "label_asym_id": "E",
+                    "color": "#ff0000",
+                    "_igraph_index": 4,
+                    "id": 4
+                },
+                {
+                    "label": "E (np.int64(117)-np.int64(121))",
+                    "label_asym_id": "E",
+                    "color": "#ff0000",
+                    "_igraph_index": 5,
+                    "id": 5
+                }
+            ],
+            "links": [
+                {
+                    "weight": 500,
+                    "color": "black",
+                    "width": 1.5,
+                    "interaction": "I1",
+                    "_igraph_index": 0,
+                    "source": 0,
+                    "target": 3
+                },
+                {
+                    "weight": 3,
+                    "color": "#d4dd80",
+                    "width": 0.5,
+                    "_igraph_index": 3,
+                    "source": 0,
+                    "target": 1,
+                    "label_asym_id": "D"
+                },
+                {
+                    "weight": 3,
+                    "color": "#d4dd80",
+                    "width": 0.5,
+                    "_igraph_index": 4,
+                    "source": 0,
+                    "target": 2,
+                    "label_asym_id": "D"
+                },
+                {
+                    "weight": 500,
+                    "color": "black",
+                    "width": 1.5,
+                    "interaction": "I2",
+                    "_igraph_index": 1,
+                    "source": 1,
+                    "target": 4
+                },
+                {
+                    "weight": 3,
+                    "color": "#d4dd80",
+                    "width": 0.5,
+                    "_igraph_index": 5,
+                    "source": 1,
+                    "target": 2,
+                    "label_asym_id": "D"
+                },
+                {
+                    "weight": 500,
+                    "color": "black",
+                    "width": 1.5,
+                    "interaction": "I3",
+                    "_igraph_index": 2,
+                    "source": 2,
+                    "target": 5
+                },
+                {
+                    "weight": 3,
+                    "color": "#ff0000",
+                    "width": 0.5,
+                    "_igraph_index": 6,
+                    "source": 3,
+                    "target": 4,
+                    "label_asym_id": "E"
+                },
+                {
+                    "weight": 3,
+                    "color": "#ff0000",
+                    "width": 0.5,
+                    "_igraph_index": 7,
+                    "source": 3,
+                    "target": 5,
+                    "label_asym_id": "E"
+                },
+                {
+                    "weight": 3,
+                    "color": "#ff0000",
+                    "width": 0.5,
+                    "_igraph_index": 8,
+                    "source": 4,
+                    "target": 5,
+                    "label_asym_id": "E"
+                }
+            ]
+        },
+        "protein_network": {
+            "directed": false,
+            "multigraph": false,
+            "graph": {},
+            "nodes": [
+                {
+                    "label": "D",
+                    "label_asym_id": "D",
+                    "color": "#d4dd80",
+                    "_igraph_index": 0,
+                    "id": 0
+                },
+                {
+                    "label": "E",
+                    "label_asym_id": "E",
+                    "color": "#ff0000",
+                    "_igraph_index": 1,
+                    "id": 1
+                }
+            ],
+            "links": [
+                {
+                    "color": "black",
+                    "interaction": [
+                        "I1",
+                        "I2",
+                        "I3"
+                    ],
+                    "label": 0.96,
+                    "_igraph_index": 0,
+                    "source": 0,
+                    "target": 1
+                }
+            ]
+        }
+    },
+    "label_asym_ids": [
+        "B",
+        "C",
+        "D",
+        "E"
+    ]
+}

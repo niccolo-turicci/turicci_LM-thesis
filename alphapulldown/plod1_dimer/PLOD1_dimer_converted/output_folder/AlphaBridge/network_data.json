@@ -1,0 +1,210 @@
+{
+    "network at 0.5": {
+        "cut-off": 0.5,
+        "network_not_merged": {
+            "directed": false,
+            "multigraph": false,
+            "graph": {},
+            "nodes": [
+                {
+                    "label": "B (np.int64(554)) (np.int64(628)-np.int64(631)) (np.int64(655)-np.int64(657)) (np.int64(661)-np.int64(662)) (np.int64(684)) (np.int64(701)-np.int64(707))",
+                    "label_asym_id": "B",
+                    "color": "#8000ff",
+                    "_igraph_index": 0,
+                    "id": 0
+                },
+                {
+                    "label": "C (np.int64(701)-np.int64(707)) (np.int64(655)-np.int64(657)) (np.int64(684)) (np.int64(628)-np.int64(631)) (np.int64(554)) (np.int64(661)-np.int64(662))",
+                    "label_asym_id": "C",
+                    "color": "#ff0000",
+                    "_igraph_index": 1,
+                    "id": 1
+                }
+            ],
+            "links": [
+                {
+                    "weight": 500,
+                    "color": "black",
+                    "width": 1.5,
+                    "interaction": "I1",
+                    "_igraph_index": 0,
+                    "source": 0,
+                    "target": 1
+                }
+            ]
+        },
+        "protein_network": {
+            "directed": false,
+            "multigraph": false,
+            "graph": {},
+            "nodes": [
+                {
+                    "label": "B",
+                    "label_asym_id": "B",
+                    "color": "#8000ff",
+                    "_igraph_index": 0,
+                    "id": 0
+                },
+                {
+                    "label": "C",
+                    "label_asym_id": "C",
+                    "color": "#ff0000",
+                    "_igraph_index": 1,
+                    "id": 1
+                }
+            ],
+            "links": [
+                {
+                    "color": "black",
+                    "interaction": [
+                        "I1"
+                    ],
+                    "label": 0.96,
+                    "_igraph_index": 0,
+                    "source": 0,
+                    "target": 1
+                }
+            ]
+        }
+    },
+    "network at 0.75": {
+        "cut-off": 0.75,
+        "network_not_merged": {
+            "directed": false,
+            "multigraph": false,
+            "graph": {},
+            "nodes": [
+                {
+                    "label": "B (np.int64(554)) (np.int64(628)-np.int64(631)) (np.int64(655)-np.int64(657)) (np.int64(661)-np.int64(662)) (np.int64(684)) (np.int64(701)-np.int64(707))",
+                    "label_asym_id": "B",
+                    "color": "#8000ff",
+                    "_igraph_index": 0,
+                    "id": 0
+                },
+                {
+                    "label": "C (np.int64(701)-np.int64(707)) (np.int64(655)-np.int64(657)) (np.int64(684)) (np.int64(628)-np.int64(631)) (np.int64(554)) (np.int64(661)-np.int64(662))",
+                    "label_asym_id": "C",
+                    "color": "#ff0000",
+                    "_igraph_index": 1,
+                    "id": 1
+                }
+            ],
+            "links": [
+                {
+                    "weight": 500,
+                    "color": "black",
+                    "width": 1.5,
+                    "interaction": "I1",
+                    "_igraph_index": 0,
+                    "source": 0,
+                    "target": 1
+                }
+            ]
+        },
+        "protein_network": {
+            "directed": false,
+            "multigraph": false,
+            "graph": {},
+            "nodes": [
+                {
+                    "label": "B",
+                    "label_asym_id": "B",
+                    "color": "#8000ff",
+                    "_igraph_index": 0,
+                    "id": 0
+                },
+                {
+                    "label": "C",
+                    "label_asym_id": "C",
+                    "color": "#ff0000",
+                    "_igraph_index": 1,
+                    "id": 1
+                }
+            ],
+            "links": [
+                {
+                    "color": "black",
+                    "interaction": [
+                        "I1"
+                    ],
+                    "label": 0.96,
+                    "_igraph_index": 0,
+                    "source": 0,
+                    "target": 1
+                }
+            ]
+        }
+    },
+    "network at 0.9": {
+        "cut-off": 0.9,
+        "network_not_merged": {
+            "directed": false,
+            "multigraph": false,
+            "graph": {},
+            "nodes": [
+                {
+                    "label": "B (np.int64(554)) (np.int64(628)-np.int64(631)) (np.int64(655)-np.int64(657)) (np.int64(661)-np.int64(662)) (np.int64(684)) (np.int64(701)-np.int64(707))",
+                    "label_asym_id": "B",
+                    "color": "#8000ff",
+                    "_igraph_index": 0,
+                    "id": 0
+                },
+                {
+                    "label": "C (np.int64(701)-np.int64(707)) (np.int64(655)-np.int64(657)) (np.int64(684)) (np.int64(628)-np.int64(631)) (np.int64(554)) (np.int64(661)-np.int64(662))",
+                    "label_asym_id": "C",
+                    "color": "#ff0000",
+                    "_igraph_index": 1,
+                    "id": 1
+                }
+            ],
+            "links": [
+                {
+                    "weight": 500,
+                    "color": "black",
+                    "width": 1.5,
+                    "interaction": "I1",
+                    "_igraph_index": 0,
+                    "source": 0,
+                    "target": 1
+                }
+            ]
+        },
+        "protein_network": {
+            "directed": false,
+            "multigraph": false,
+            "graph": {},
+            "nodes": [
+                {
+                    "label": "B",
+                    "label_asym_id": "B",
+                    "color": "#8000ff",
+                    "_igraph_index": 0,
+                    "id": 0
+                },
+                {
+                    "label": "C",
+                    "label_asym_id": "C",
+                    "color": "#ff0000",
+                    "_igraph_index": 1,
+                    "id": 1
+                }
+            ],
+            "links": [
+                {
+                    "color": "black",
+                    "interaction": [
+                        "I1"
+                    ],
+                    "label": 0.96,
+                    "_igraph_index": 0,
+                    "source": 0,
+                    "target": 1
+                }
+            ]
+        }
+    },
+    "label_asym_ids": [
+        "B",
+        "C"
+    ]
+}
