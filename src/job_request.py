@@ -63,17 +63,25 @@ def output_job_request(script_dir, output_folder, jobname):
                     chains[chain].append(aa_three_to_one[resn])
 
     # Create the job request file structure
-    sequences = []
+    # Group chains by sequence to handle oligomers (e.g., dimers, tetramers)
+    sequence_groups = {}  # sequence -> count
     for chain_id in sorted(chains.keys()):  
         if chains[chain_id]:  # makes sure chains have residues
             seq = ''.join(chains[chain_id])
-            sequences.append({
-                "proteinChain": {
-                    "sequence": seq,
-                    "count": 1,
-                    "useStructureTemplate": useStructureTemplate
-                }
-            })
+            if seq not in sequence_groups:
+                sequence_groups[seq] = 0
+            sequence_groups[seq] += 1
+    
+    # Create sequences list with proper stoichiometry (matching AF3 format)
+    sequences = []
+    for seq, count in sequence_groups.items():
+        sequences.append({
+            "proteinChain": {
+                "sequence": seq,
+                "count": count,
+                "useStructureTemplate": useStructureTemplate
+            }
+        })
     
     # Fills the fuelds of the file 
     job_request = [{
@@ -86,7 +94,10 @@ def output_job_request(script_dir, output_folder, jobname):
     
     with open(os.path.join(output_folder, "run_out_job_request.json"), "w") as f:
         json.dump(job_request, f, indent=1)
-    print("job_request.json (with {len(sequences)} protein chains) written to output_folder/run_out_job_request.json")
+    
+    total_chains = sum(seq_info["proteinChain"]["count"] for seq_info in sequences)
+    print(f"job_request.json written to output_folder/run_out_job_request.json")
     for i, seq_info in enumerate(sequences):
         seq_len = len(seq_info["proteinChain"]["sequence"])
-        print(f"  Chain {i+1}: {seq_len} residues")
+        count = seq_info["proteinChain"]["count"]
+        print(f"  Sequence {i+1}: {seq_len} residues × {count} copies")
