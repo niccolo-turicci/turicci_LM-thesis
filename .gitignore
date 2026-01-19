@@ -1,1 +1,5 @@
 src/__pycache__
+alphapulldown/*/converted/temp_files/
+alphapulldown/*/converted/output_folder/run_out_full_data_*.json
+*.npy # se non servono altrove
+*.csv # se sono solo grandi dati
