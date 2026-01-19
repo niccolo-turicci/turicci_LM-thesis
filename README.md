@@ -18,6 +18,15 @@ These script are in the `turicci_LM-thesis/alphapulldown/src` folder. There's on
 ## 2. APD output conversion (APD -> AB)
 There are several scripts, specific for every new file that has to be created.
 Each script is commented and explained internally. 
+```python
+python -m src --input ./your/input/folder --output ./your/output/folder --jobname nameofjob
+```
+_--input_ the folder with the APD output
+
+_--output_ where to save the code output (converted folder). It will create output_folder and temp_folder inside the specified one. 
+
+_--jobname_ nem of the job to assure reproducibility, trackability and consistency.
+
   ### full_data.py
   This creates the full_data.json file starting from the .pdb (ranked_X.pdb) file, the PAE matrix adn the .pkl file; this done for each of the five predicted structures.
   ### summary_confidences.py
@@ -28,15 +37,6 @@ Each script is commented and explained internally.
   This converts the .pdb structures into .cif (AF3-like) format; the only one accepted by AlphaBridge. 
   ### ranking.py
   This script renames each summary_confidences.json , and all the realtive files accordingly, based on the ipTM score. In this way ABridge uses the structure with the most confident interface to operate. 
+
 ## 3. AlphaBridge (AB)
 
-# Command usage
-## Converting APD output to ABridge
-```python
-python -m src --input ./your/input/folder --output ./your/output/folder --jobname nameofjob
-```
-_--input_ the folder with the APD output
-
-_--output_ where to save the code output (converted folder). It will create output_folder and temp_folder inside the specified one. 
-
-_--jobname_ nem of the job to assure reproducibility, trackability and consistency.
