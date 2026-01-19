@@ -26,18 +26,17 @@ def convert_pdb_to_cif(script_dir, output_folder):
         structure = parser.get_structure('protein', pdb_file)
         
         chains_info = {}
-        entity_id = 1
         
+        # First pass: extract sequences for all chains
         for model in structure:
             for chain in model:
                 chain_id = chain.get_id()
                 if chain_id not in chains_info:
                     chains_info[chain_id] = {
-                        'entity_id': entity_id,
+                        'entity_id': None,  # Will be assigned later
                         'sequence': [],
                         'residues': []
                     }
-                    entity_id += 1
                 
                 for residue in chain:
                     if residue.get_id()[0] == ' ':  # The standard residue
@@ -46,6 +45,19 @@ def convert_pdb_to_cif(script_dir, output_folder):
                         if res_name in aa_three_to_one:
                             chains_info[chain_id]['sequence'].append(res_name)
                             chains_info[chain_id]['residues'].append((res_name, res_num))
+        
+        # Second pass: group chains by identical sequences and assign entity IDs
+        sequence_to_entity = {}
+        entity_id = 1
+        
+        for chain_id in sorted(chains_info.keys()):
+            seq_tuple = tuple(chains_info[chain_id]['sequence'])
+            
+            if seq_tuple not in sequence_to_entity:
+                sequence_to_entity[seq_tuple] = entity_id
+                entity_id += 1
+            
+            chains_info[chain_id]['entity_id'] = sequence_to_entity[seq_tuple]
         
         # Actually write the .cif file: AlphaFold 3 format structure
         with open(cif_file, 'w') as f:
