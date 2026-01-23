@@ -1,3 +1,5 @@
+#courtesy of Riccardo Piccinno, Università di Pavia
+
 # load packages
 import json
 from pycirclize import Circos
