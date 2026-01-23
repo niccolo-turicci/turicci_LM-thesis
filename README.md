@@ -39,4 +39,25 @@ _--jobname_ nem of the job to assure reproducibility, trackability and consisten
   This script renames each summary_confidences.json , and all the realtive files accordingly, based on the ipTM score. In this way ABridge uses the structure with the most confident interface to operate. 
 
 ## 3. AlphaBridge (AB)
+Python scripts are in the `turicci_LM-thesis/alphabridge` folder. These scripts can be ran in HPC with an interactive job; or even locally. 
+First, to detect interacting residues:
+```python
+python define_interfaces.py -i <PATH/TO/AF3_FOLDER>
+```
+Then, to create the ribbon plots (circos):
+```python
+python alphabridge_circos.py <PATH/TO/AF3_FOLDER/AlphaBridge>
+```
 
+## BONUS TIP 💡:
+To get the same AF3 coloring of pLDDT in PyMol:
+```bash
+set_color n0, [0.051, 0.341, 0.827]
+set_color n1, [0.416, 0.796, 0.945]
+set_color n2, [0.996, 0.851, 0.212]
+set_color n3, [0.992, 0.490, 0.302]
+color n0, b < 100; color n1, b < 90
+color n2, b < 70;  color n3, b < 50
+```
+
+You're welcome 😜
