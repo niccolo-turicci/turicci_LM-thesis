@@ -1,4 +1,4 @@
-# AlphaPullDown and AlphaBridge: a pipeline for PPI prediction and validation
+# AlphaPullDown and AlphaBridge: a workflow for PPI prediction and validation
 This is the repository with the code for my Master's degree thesis in Molecular Biology and Genetics at the Università di Pavia (Dipartimento di Biologia e Biotecnologie, L. Spallanzani). 
 
 ## Aim of the thesis
