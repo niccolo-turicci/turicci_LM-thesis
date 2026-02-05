@@ -12,6 +12,11 @@ The goal is to create a protocol for efficient PPI prediction and validation by 
 
 3- run AB to get the plots
 
+## 0. Install tools
+Guides, scripts and installation requirements can be found at the following pages:
+APD --> https://github.com/KosinskiLab/AlphaPulldown 
+AB --> https://github.com/PDB-REDO/AlphaBridge 
+
 ## 1. AlphaPullDown (APD)
 Need to run on **HPC** with a **batch job**; so it needs **job request scripts**. 
 These script are in the `turicci_LM-thesis/alphapulldown/src` folder. There's one for running APD in _custom_ mode and one for _pulldown_ mode.  
