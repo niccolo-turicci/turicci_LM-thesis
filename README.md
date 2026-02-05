@@ -14,8 +14,8 @@ The goal is to create a protocol for efficient PPI prediction and validation by 
 
 ## 0. Install tools
 Guides, scripts and installation requirements can be found at the following pages:
-APD --> https://github.com/KosinskiLab/AlphaPulldown 
-AB --> https://github.com/PDB-REDO/AlphaBridge 
+ APD --> https://github.com/KosinskiLab/AlphaPulldown 
+ AB --> https://github.com/PDB-REDO/AlphaBridge 
 
 ## 1. AlphaPullDown (APD)
 Need to run on **HPC** with a **batch job**; so it needs **job request scripts**. 
